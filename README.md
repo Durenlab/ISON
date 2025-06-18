@@ -16,13 +16,19 @@ If you have a GPU and wish to enable CUDA support, please install the appropriat
 
 ## Running the model
 
-To run ISON, run the `run-ison.sh` script.
-
-Make sure the `.sh` file is executable, then run it from your terminal:
+To run ISON, run the `run-ison.py` .
 
 ```
-chmod +x run-ison.sh
-./run-ison.sh
+python run-ison.py --scRNA "$SCRNA" \
+                        --scATAC "$SCATAC" \
+                        --ST "$ST" \
+                        --coords "$COORDS" \
+                        --output-dir "$OUTPUT_DIR" \
+                        --lambda1 "$LAMBDA1" \
+                        --lambda2 "$LAMBDA2" \
+                        --K "$K" \
+                        --batch_size "$BATCH_SIZE"\
 ```
 
-You can change the hyperparameters $\lambda_1$, $\lambda_2$, $K$ and `batch_size`.
+The default parameters are set as: $\lambda_1$ = 15, $\lambda_2$ = 0.001, $K$ = 8 and `batch_size` = 512.
+To evaluate ISON, there are toy datasets provided in the `data` folder in .h5ad format.  evaluation.py in `project` folder is provided to compute the Pearson correlation coefficient (PCC) between the true and predicted ATAC values.

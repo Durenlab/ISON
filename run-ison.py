@@ -8,7 +8,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import random
 import os
-from scipy.sparse import coo_matrix, csr_matrix
+import sys
+
+
+utils_path = os.path.join(os.path.dirname(__file__), 'project')
+sys.path.append(utils_path)
 
 import utils
 import preprocess
@@ -24,10 +28,10 @@ if __name__ == '__main__':
     parser.add_argument("--ST", help="Path to spatial transcriptomics dataset (spots x genes)", type=str, default=None, required=True)
     parser.add_argument("--coords", help="Path to spatial transcriptomics coordinates file (spots x 2)", type=str, default=None, required=True)
     parser.add_argument('--output-dir', help='Output directory', default='.')
-    parser.add_argument('--lambda1', help='Hyperparameter tuning for gene expression matrices', default=5.0, type=float)
-    parser.add_argument('--lambda2', help='Hyperparameter tuning for spatial matrix', default=1.0, type=float)
-    parser.add_argument('--K', help='Number of components', default=32, type=int)
-    parser.add_argument('--batch_size', help='Size of mini batches', default=1024, type=int)
+    parser.add_argument('--lambda1', help='Hyperparameter tuning for gene expression matrices', default=15.0, type=float)
+    parser.add_argument('--lambda2', help='Hyperparameter tuning for spatial matrix', default=0.001, type=float)
+    parser.add_argument('--K', help='Number of components', default=8, type=int)
+    parser.add_argument('--batch_size', help='Size of mini batches', default=512, type=int)
     parser.add_argument('--filename', '-ofp', help="Output file name", default="spatial", type=str)
 
     args = parser.parse_args()
@@ -68,7 +72,7 @@ if __name__ == '__main__':
     ### inputs are anndata.X
     print("Training...")
     W1,W2,H1,H2=tri_nmf.KL_NMF(test_mu.t(), train_mu.t(), train_sp.t(), K=k, batch_size=args.batch_size, maxiter=50, iterLoss=1, lambda1=lambda1, lambda2=lambda2, coords=coords,  device=dev)
-
+    print("Training complete.")
     W1=W1[:,:k]
     H2=H2[:k,:]
     O2_hat=torch.mm(W1,H2)
@@ -89,7 +93,7 @@ if __name__ == '__main__':
     output_filename = os.path.join(output_dir, args.filename + '-ATAC' +'.h5ad')
     pred_atac.write_h5ad(output_filename)
 
-    print(f"File saved to {output_filename}")
+    print(f"spatial-ATAC saved to {output_filename}")
     
     #Save ST
     W2=W2[:,:k]
@@ -106,4 +110,4 @@ if __name__ == '__main__':
     output_filename = os.path.join(output_dir, args.filename + '-RNA' +'.h5ad')
     pred_atac.write_h5ad(output_filename)
 
-    print(f"File saved to {output_filename}")
+    print(f"Denoised RNA saved to {output_filename}")
