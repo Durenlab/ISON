@@ -85,7 +85,7 @@ def KL_NMF(PeakO, X1, X2, K, maxiter, iterLoss=0, lambda1=1, lambda2=1, batch_si
     mu1 = (l1 * lambda1)/ l2
     mu2 = (l1 * lambda1)/ l3
 
-    adjacency_matrix=compute_adjacency_with_limits(coords, radius=100)
+    adjacency_matrix=compute_adjacency_with_limits(coords)
     degree_values = np.array(adjacency_matrix.sum(axis=1))  # Get degree sum as 1D array
     degree_matrix = diags(degree_values)   # Convert sum result to 1D array
     lapm = degree_matrix - adjacency_matrix
@@ -162,10 +162,13 @@ def KL_NMF(PeakO, X1, X2, K, maxiter, iterLoss=0, lambda1=1, lambda2=1, batch_si
     return W1, W2, H1, H2
 
 # for incorporating spatial information
-def compute_adjacency_with_limits(coords, radius):
+def compute_adjacency_with_limits(coords):
     n = len(coords)
     dist_matrix = distance_matrix(coords, coords)
     A = np.zeros((n, n), dtype=int)
+    nonzero_dists = dist_matrix[dist_matrix > 0]
+    avg_dist = np.mean(nonzero_dists)
+    radius = avg_dist * 0.1  
 
     for i in range(n):
         dists = dist_matrix[i]
