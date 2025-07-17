@@ -12,7 +12,7 @@ ISON is a computational tool developed to infer spatial chromatin accessibility 
 
 - Python >= 3.8 
 The `environment.yml` file lists all the libraries required to run ISON, with `PyTorch` configured for CPU-only usage.
-If you have a GPU and wish to enable CUDA support, please install the appropriate version of `PyTorch` by following the instructions at https://pytorch.org/get-started/locally.
+If you have a GPU and wish to enable CUDA support, please install the appropriate version of `PyTorch` by following the instructions at <https://pytorch.org/get-started/locally>.
 
 ## Running the model
 
@@ -35,7 +35,7 @@ To evaluate ISON, there are toy datasets provided in the `data` folder in .h5ad 
 
 ## Tutorial
 
-To run ISON using processed P21 data, run the tutorial.sh script. Processed P21 and P22 data is available at <https://drive.google.com/drive/folders/15LMxbizMdrBuPALeMwLvaeg5yc63zljh?usp=share_link>. The evaluation.py script computes the PCC between ground truth and predicted chromatin accessibility values for ISON's performance evaluation.
+To run ISON using processed P21 data, run the `tutorial.sh` script. Processed P21 and P22 data is available at <https://drive.google.com/drive/folders/15LMxbizMdrBuPALeMwLvaeg5yc63zljh?usp=share_link>. The `evaluation.py` script computes the PCC between ground truth and predicted chromatin accessibility values for ISON's performance evaluation.
 
 Make sure the .sh file is executable, then run it from your terminal:
 

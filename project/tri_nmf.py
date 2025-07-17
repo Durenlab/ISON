@@ -168,7 +168,7 @@ def compute_adjacency_with_limits(coords):
     A = np.zeros((n, n), dtype=int)
     nonzero_dists = dist_matrix[dist_matrix > 0]
     avg_dist = np.mean(nonzero_dists)
-    radius = avg_dist * 0.1  
+    radius = avg_dist * 1.5  
 
     for i in range(n):
         dists = dist_matrix[i]
