@@ -23,15 +23,12 @@ def read_data(filepath, dlim=None):
     return adata
 
 #inner join
-def prep(geneexp, peaks, spgene, merge=True, raw=False, tfidf=False):
+def prep(geneexp, peaks, spgene, merge=True, raw=False):
     if raw:
         geneexp=filter_mat(geneexp)
         peaks=filter_mat(peaks)
         spgene=filter_mat(spgene)
-        
-    if tfidf:
-        peaks=do_tfidf(peaks)
-    
+      
     if merge:
         
         #barcodes
@@ -69,31 +66,6 @@ def filter_mat(X):
      
     return X
 
-
-def do_tfidf(atac):
-    a=atac.X.T
-#     a=1.0 * (a>0)
-    tf1= a / np.log(np.sum(a, axis=0))
-    idf=np.log(1+ a.shape[1] /(1 + np.sum(a,axis=1))).reshape(-1,1)
-    a1=tf1*idf
-    a1 = np.nan_to_num(a1, nan=0)
-    atac.X= a1.T
-    print("with TF-IDF")
-    
-    return atac
-
-def do_tfidf_sparse(atac):
-    
-    a=atac.X.A.T
-    a=1.0 * (a>0)
-    tf1= a / np.log(sum(a))
-    idf=np.log(1+ a.shape[1] /(1 + np.sum(a,axis=1))).reshape(-1,1)
-    a1=tf1*idf
-    a1 = np.nan_to_num(a1, nan=0)
-    atac.X= a1.T
-    print("with TF-IDF")
-    
-    return atac
 
 def remove_mito(adata):
     mt=adata.var_names.str.lower().str.startswith('mt')
