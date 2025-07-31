@@ -1,6 +1,6 @@
 # Integrated Spatial Omics Network from spatial transcriptomics and single cell multiome data (ISON)
 
-ISON is a computational tool developed to infer spatial chromatin accessibility by integrating spatial transcriptomics with single-cell multiomics data. It performs dimension reduction and learns the embeddings in a joint latent space and uses these embeddings to predict chromatin accessibility data in a spatial context.
+![ISON is a computational tool developed to infer spatial chromatin accessibility by integrating spatial transcriptomics with single-cell multiomics data. It performs dimension reduction and learns the embeddings in a joint latent space and uses these embeddings to predict chromatin accessibility data in a spatial context.](images/Fig1.pdf)
 
 ## Input
 
