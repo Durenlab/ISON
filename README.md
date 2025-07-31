@@ -4,15 +4,22 @@ ISON is a computational tool developed to infer spatial chromatin accessibility 
 
 ## Input
 
-- Single-cell multiome (scRNA + scATAC seq)
-- Spatial transcriptomics data
-- Coordinates file with only x and y coordinates
+- Single-cell multiome 
+	- scRNA (cells x genes)
+	- scATAC (cells x peaks)
+- Spatial transcriptomics (spots x genes)
+- Coordinates file with only x and y coordinates (spots x 2)
 
 ## Installation
 
 - Python >= 3.8 
 The `environment.yml` file lists all the libraries required to run ISON, with `PyTorch` configured for CPU-only usage.
 If you have a GPU and wish to enable CUDA support, please install the appropriate version of `PyTorch` by following the instructions at <https://pytorch.org/get-started/locally>.
+
+```
+conda env create -f environment.yml
+conda activate ison_env
+```
 
 ## Running the model
 

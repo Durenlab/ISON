@@ -2,16 +2,16 @@ import scanpy as sc
 import pandas as pd
 import torch
 import argparse
-import torch.nn.functional as F
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 import random
 import os
 from scipy.stats import pearsonr
 from scipy.sparse import issparse
 import magic
 
+import sys
+utils_path = os.path.join(os.path.dirname(__file__), 'project')
+sys.path.append(utils_path)
 import utils
 import preprocess
 import tri_nmf
@@ -49,12 +49,12 @@ if __name__ == '__main__':
     pred_sp=utils.convert_to_tensor(pred_atac, transpose=False)
 
     pcc1=utils.pearson_correlation(pred_sp, test_sp, d=0)
-    pcc1[pcc1.isnan()] = 0
-    pcc1=pcc1[~torch.isinf(pcc1)]
+    #pcc1[pcc1.isnan()] = 0
+    #pcc1=pcc1[~torch.isinf(pcc1)]
 
     pcc2=utils.pearson_correlation(pred_sp, test_sp, d=1)
-    pcc2[pcc2.isnan()] = 0
-    pcc2=pcc2[~torch.isinf(pcc2)]
+    #pcc2[pcc2.isnan()] = 0
+    #pcc2=pcc2[~torch.isinf(pcc2)]
      
     print("PCC-gene:", pcc1.mean().data.item(), "PCC-cell:", pcc2.mean().data.item())
     

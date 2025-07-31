@@ -2,21 +2,8 @@ import scanpy as sc
 import numpy as np
 import pandas as pd
 import torch
-from torch.utils.data import Dataset
 from scipy.sparse import issparse
 
-class CustomDataset(Dataset):
-    def __init__(self, data_tensor, label_tensor):
-        self.data_tensor = data_tensor
-        self.label_tensor = label_tensor
-        assert len(self.data_tensor) == len(self.label_tensor)
-    def __len__(self):
-        return len(self.data_tensor)
-
-    def __getitem__(self, idx):
-        data = self.data_tensor[idx]
-        label = self.label_tensor[idx]
-        return data, label
 
 def convert_to_tensor(adata, transpose=False, device=None):
     if transpose== True:
@@ -51,7 +38,7 @@ def pearson_correlation(A, B, d):
 def get_device():
     if torch.cuda.is_available():
         print("GPU is available")
-        return torch.device("cuda:0")
+        return torch.device("cuda")
     else:
         print("GPU is not available")
         return torch.device('cpu')

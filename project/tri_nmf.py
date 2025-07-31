@@ -8,8 +8,6 @@ import sys
 import utils
 import gc
 from scipy.spatial import distance_matrix
-
-# torch.cuda.memory_summary(device=None, abbreviated=False)
         
 def KL_NMF(PeakO, X1, X2, K, maxiter, iterLoss=0, lambda1=1, lambda2=1, batch_size=1024, W10=None, W20=None, H10=None, H20=None, coords=None, device=None, dtype=torch.float32):
     

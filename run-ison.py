@@ -4,13 +4,9 @@ import torch
 import argparse
 import anndata
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 import random
 import os
 import sys
-
-
 utils_path = os.path.join(os.path.dirname(__file__), 'project')
 sys.path.append(utils_path)
 

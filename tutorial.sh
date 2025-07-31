@@ -1,10 +1,10 @@
 #!/bin/bash
 
-SCRNA="/your/path/rnap21.h5ad"
-SCATAC="/your/path/atacp21.h5ad"
-ST="/your/path/sprnap21.h5ad"
-COORDS="/your/path/coordsp21.csv"
-OUTPUT_DIR="./output_p21"
+SCRNA="/your/path/rna.h5ad"
+SCATAC="/your/path/atac.h5ad"
+ST="/your/path/sprna.h5ad"
+COORDS="/your/path/coords.csv"
+OUTPUT_DIR="/your/path/output"
 
 
 LAMBDA1=15
@@ -30,7 +30,7 @@ echo
 echo "PHASE 2: EVALUATION"
 echo
 
-SP_ATAC="/your/path/spatacp21.h5ad"
+SP_ATAC="/your/path/spatac.h5ad"
 
 python evaluation.py --st_ATAC "$SP_ATAC" \
                          -o "$OUTPUT_DIR" \
