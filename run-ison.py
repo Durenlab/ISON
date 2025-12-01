@@ -22,13 +22,21 @@ if __name__ == '__main__':
     parser.add_argument("--scRNA", help="Path to scRNA-seq dataset (cells x genes)", type=str, default=None, required=True)
     parser.add_argument("--scATAC", help="Path to scATAC-seq dataset (cells x peaks)", type=str, default=None, required=True)
     parser.add_argument("--ST", help="Path to spatial transcriptomics dataset (spots x genes)", type=str, default=None, required=True)
+<<<<<<< HEAD
     parser.add_argument("--coords", help="Path to spatial transcriptomics coordinates file (spots x 2)", type=str, default=None, required=True)
+=======
+    parser.add_argument("--coords", help="Path to spatial transcriptomics coordinates file (spots x 2)", type=str, default=None, required=False)
+>>>>>>> add benchmark
     parser.add_argument('--output-dir', help='Output directory', default='.')
     parser.add_argument('--lambda1', help='Hyperparameter tuning for gene expression matrices', default=15.0, type=float)
     parser.add_argument('--lambda2', help='Hyperparameter tuning for spatial matrix', default=0.001, type=float)
     parser.add_argument('--K', help='Number of components', default=8, type=int)
     parser.add_argument('--batch_size', help='Size of mini batches', default=512, type=int)
     parser.add_argument('--filename', '-ofp', help="Output file name", default="spatial", type=str)
+<<<<<<< HEAD
+=======
+    parser.add_argument('--lattice', '-lat', help="Grid layout", default="square", type=str)
+>>>>>>> add benchmark
 
     args = parser.parse_args()
 
@@ -36,18 +44,39 @@ if __name__ == '__main__':
     rna=preprocess.read_data(args.scRNA)
     atac=preprocess.read_data(args.scATAC)
     sprna=preprocess.read_data(args.ST)
+<<<<<<< HEAD
 
     #coords
     coords=pd.read_csv(args.coords, index_col=0)
     print(coords.columns)
     coords=coords[["x", "y"]]
+=======
+    print("RNA shape:", rna.shape, "ATAC shape:", atac.shape, "ST shape:", sprna.shape)
+
+
+
+    #coords
+    if args.coords:
+        coords=pd.read_csv(args.coords, index_col=0)        
+        print(coords.columns)
+        coords=coords[["x", "y"]]
+    else:
+        coords=None
+>>>>>>> add benchmark
     
     #preprocessing
     rna=preprocess.remove_mito(rna) 
     sprna=preprocess.remove_mito(sprna) 
+<<<<<<< HEAD
    
     
     trainmu, testmu, trainsp=preprocess.prep(rna, atac, sprna, raw=False, merge=True)
+=======
+
+    
+    trainmu, testmu, trainsp=preprocess.prep(rna, atac, sprna, raw=False, merge=True)
+    print(testmu.var_names)
+>>>>>>> add benchmark
 
     train_mu=utils.convert_to_tensor(trainmu,transpose=False)
     test_mu=utils.convert_to_tensor(testmu, transpose=False)
@@ -57,7 +86,14 @@ if __name__ == '__main__':
     train_mu=train_mu.to(dev, dtype=torch.float32)
     test_mu=test_mu.to(dev, dtype=torch.float32)
     
+<<<<<<< HEAD
     coords=coords[coords.index.isin(trainsp.obs.index)]
+=======
+    if coords is not None:  #if coords are provided, use them to compute the adjacency matrix
+        coords=coords[coords.index.isin(trainsp.obs.index)]
+    else:
+        coords=None
+>>>>>>> add benchmark
 
     lambda1= args.lambda1
     lambda2= args.lambda2
@@ -67,7 +103,11 @@ if __name__ == '__main__':
     
     ### inputs are anndata.X
     print("Training...")
+<<<<<<< HEAD
     W1,W2,H1,H2=tri_nmf.KL_NMF(test_mu.t(), train_mu.t(), train_sp.t(), K=k, batch_size=args.batch_size, maxiter=50, iterLoss=1, lambda1=lambda1, lambda2=lambda2, coords=coords,  device=dev)
+=======
+    W1,W2,H1,H2=tri_nmf.KL_NMF(test_mu.t(), train_mu.t(), train_sp.t(), K=k, batch_size=args.batch_size, maxiter=50, iterLoss=1, lambda1=lambda1, lambda2=lambda2, coords=coords,  device=dev, lattice=args.layout)
+>>>>>>> add benchmark
     print("Training complete.")
     W1=W1[:,:k]
     H2=H2[:k,:]
