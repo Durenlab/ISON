@@ -1,7 +1,7 @@
 ## Spatial Grid Configuration
 
 ISON supports different lattice geometries for spatial transcriptomics data.  
-You can select the grid layout to define neighbor relationships for spatial autocorrelation and adjacency matrices.
+You can select the grid layout to define neighbor relationships for adjacency matrices.
 
 | Option       | Description                                                                 | Default |
 |--------------|-----------------------------------------------------------------------------|---------|
