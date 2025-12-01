@@ -27,8 +27,13 @@ def pearson_correlation(A, B, d):
     cov_AB = torch.sum((A - mean_A) * (B - mean_B), dim=d)
 
     # Calculate standard deviation
+<<<<<<< HEAD
     std_A = torch.sqrt(torch.sum((A - mean_A) ** 2, dim=d))
     std_B = torch.sqrt(torch.sum((B - mean_B) ** 2, dim=d))
+=======
+    std_A = torch.sqrt(torch.sum((A - mean_A) ** 2, dim=d)) + 1e-10
+    std_B = torch.sqrt(torch.sum((B - mean_B) ** 2, dim=d)) + 1e-10
+>>>>>>> add benchmark
 
     # Calculate Pearson correlation coefficient
     correlation = cov_AB / (std_A * std_B)
