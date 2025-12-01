@@ -9,7 +9,11 @@ import utils
 import gc
 from scipy.spatial import distance_matrix
         
+<<<<<<< HEAD
 def KL_NMF(PeakO, X1, X2, K, maxiter, iterLoss=0, lambda1=1, lambda2=1, batch_size=1024, W10=None, W20=None, H10=None, H20=None, coords=None, device=None, dtype=torch.float32):
+=======
+def KL_NMF(PeakO, X1, X2, K, maxiter, iterLoss=0, lambda1=1, lambda2=1, batch_size=1024, W10=None, W20=None, H10=None, H20=None, coords=None, device=None, dtype=torch.float32, lattice="square"):
+>>>>>>> add benchmark
     
     gc.collect()
     torch.cuda.empty_cache()
@@ -76,6 +80,7 @@ def KL_NMF(PeakO, X1, X2, K, maxiter, iterLoss=0, lambda1=1, lambda2=1, batch_si
     mu1 = (l1 * lambda1)/ l2
     mu2 = (l1 * lambda1)/ l3
 
+<<<<<<< HEAD
     adjacency_matrix=compute_adjacency_with_limits(coords)
     degree_values = np.array(adjacency_matrix.sum(axis=1))  # Get degree sum as 1D array
     degree_matrix = diags(degree_values)   # Convert sum result to 1D array
@@ -84,11 +89,29 @@ def KL_NMF(PeakO, X1, X2, K, maxiter, iterLoss=0, lambda1=1, lambda2=1, batch_si
 	
 	#storing data into batches
     
+=======
+    if coords is not None: #if coords are provided, use them to compute the adjacency matrix    
+        adjacency_matrix=compute_adjacency_with_limits(coords, lattice=lattice)
+        degree_values = np.array(adjacency_matrix.sum(axis=1))  # Get degree sum as 1D array
+        degree_matrix = diags(degree_values)   # Convert sum result to 1D array
+        lapm = degree_matrix - adjacency_matrix
+        lapm = np.asarray(lapm)
+	
+	#storing data into batches
+
+>>>>>>> add benchmark
     for i, (s1, s2) in enumerate(zip(kf.split(X1.t()), kf.split(X2.t()))):
         mb1 =s1[1]
         mb2 =s2[1]
 
+<<<<<<< HEAD
         lm_splits.append(torch.tensor(lapm[mb2, :][:, mb2]).to(device=device, dtype=dtype))
+=======
+        if coords is not None:
+            lm_splits.append(torch.tensor(lapm[mb2, :][:, mb2]).to(device=device, dtype=dtype))
+        else:
+            lm_splits.append(None)
+>>>>>>> add benchmark
         peakosplits.append(PeakO[:, mb1]) #.to(device=device, dtype=dtype)
         x1splits.append(X1[:, mb1])
         x2splits.append(X2[:, mb2])
@@ -114,7 +137,14 @@ def KL_NMF(PeakO, X1, X2, K, maxiter, iterLoss=0, lambda1=1, lambda2=1, batch_si
             H1[:, mb1] = F.relu(H10[:, mb1] * (numer / denom))
 
             # Update H2
+<<<<<<< HEAD
             numer = mu2 * W20.T @ (x2i / W20_H20_mb2) + 2 * lambda2 * H20[:, mb2] @ lm_splits[i]
+=======
+            if coords is not None:
+                numer = mu2 * W20.T @ (x2i / W20_H20_mb2) + 2 * lambda2 * H20[:, mb2] @ lm_splits[i]
+            else:
+                numer = mu2 * W20.T @ (x2i / W20_H20_mb2) + 2 * lambda2 * H20[:, mb2]
+>>>>>>> add benchmark
             denom = mu2 * W20.T @ onesW20 + eps  
             H2[:, mb2] = F.relu(H20[:, mb2] * (numer / denom))
 
@@ -152,6 +182,7 @@ def KL_NMF(PeakO, X1, X2, K, maxiter, iterLoss=0, lambda1=1, lambda2=1, batch_si
             
     return W1, W2, H1, H2
 
+<<<<<<< HEAD
 # for incorporating spatial information
 def compute_adjacency_with_limits(coords):
     n = len(coords)
@@ -163,10 +194,47 @@ def compute_adjacency_with_limits(coords):
 
     for i in range(n):
         dists = dist_matrix[i]
+=======
+def compute_adjacency_with_limits(coords, lattice=lattice):
+
+    n = len(coords)
+    dist_matrix = distance_matrix(coords, coords)
+    A = np.zeros((n, n), dtype=int)
+
+    nonzero_dists = dist_matrix[dist_matrix > 0]
+    avg_dist = np.mean(nonzero_dists)
+    radius = avg_dist * 1.5
+
+    if lattice == "square":
+        max_neighbors_interior = 8
+    elif lattice == "hex":
+        max_neighbors_interior = 6
+    elif lattice == "triangle":
+        max_neighbors_interior = 6
+    else:
+        raise ValueError("lattice must be 'square', 'hex', or 'triangle'.")
+
+    def classify(num_close):
+        if num_close <= 3:
+            # corner-like region
+            return min(3, max_neighbors_interior)
+        elif num_close <= 5:
+            # edge-like region
+            return min(5, max_neighbors_interior)
+        else:
+            # interior region
+            return max_neighbors_interior
+
+    # Build adjacency based on distance + lattice geometry
+    for i in range(n):
+        dists = dist_matrix[i]
+        # sort neighbors by distance
+>>>>>>> add benchmark
         neighbor_indices = np.argsort(dists)
         neighbor_indices = neighbor_indices[neighbor_indices != i]
         close_neighbors = neighbor_indices[dists[neighbor_indices] <= radius]
 
+<<<<<<< HEAD
         num_close = len(close_neighbors)
 
         if num_close <= 3:
@@ -182,3 +250,13 @@ def compute_adjacency_with_limits(coords):
             A[j, i] = 1  # make symmetric
 
     return A
+=======
+        max_n = classify(len(close_neighbors))
+
+        for j in close_neighbors[:max_n]:
+            A[i, j] = 1
+            A[j, i] = 1  # keep symmetric
+
+    return A
+
+>>>>>>> add benchmark
