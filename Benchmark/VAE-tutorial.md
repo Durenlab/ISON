@@ -1,6 +1,6 @@
 ## Running `vae.py`
 
-To run the `vae.py` file, make sure that both the **1st VAE** and **2nd VAE** model files are available.
+To run the `vae.py` file, make sure that both the **1st VAE** (bemodel) and **2nd VAE** model (model2) files are available.
 
 The trained models are stored at the following Google Drive link:
 
