@@ -52,6 +52,11 @@ Make sure the .sh file is executable, then run it from your terminal:
 chmod +x tutorial.sh
 ./tutorial.sh
 ```
-## Choosing the optimal hyperparameters
 
-You can choose $K$ based on the number of cell types if known or how granularity you would prefer. Increasing $K$ allows the model to capture more granular cell types, whereas smaller $K$ is appropriate when fewer cell types are expected. To obtain optimal $lambda_1$, you can refer to `lambda1_tune` jupyter notebook. It uses a biology-informed tuning strategy and uses peak-gene distance and correlation information.
+## Choosing Optimal Hyperparameters
+
+The choice of hyperparameters depends on both prior biological knowledge and the desired level of resolution in your analysis.
+- Number of clusters ($K$):
+If the expected number of cell types is known, $K$ can be set accordingly. Otherwise, treat $K$ as a resolution parameter: larger values enable the model to distinguish finer-grained cell populations, while smaller values are better suited for capturing broader cell type groupings.
+- Regularization parameter ($\lambda_1$):
+To select an appropriate value for $\lambda_1$, refer to the lambda1_tune Jupyter notebook. This notebook implements a biologically informed tuning approach that incorporates peak–gene distance information to guide parameter selection.
