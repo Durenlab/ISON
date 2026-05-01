@@ -59,4 +59,4 @@ The choice of hyperparameters depends on both prior biological knowledge and the
 - $K$:
 If the expected number of cell types is known, $K$ can be set accordingly. Otherwise, treat $K$ as a resolution parameter: larger values enable the model to distinguish finer-grained cell populations, while smaller values are better suited for capturing broader cell type groupings.
 - $\lambda_1$:
-To select an appropriate value for $\lambda_1$, refer to the lambda1_tune Jupyter notebook. This notebook implements a biologically informed tuning approach that incorporates peak–gene distance information to guide parameter selection.
+To select an appropriate value for $\lambda_1$, refer to the `lambda1_tune` Jupyter notebook. This notebook implements a biologically informed tuning approach that uses peak–gene distance information to guide parameter selection.
