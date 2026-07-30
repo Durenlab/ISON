@@ -159,7 +159,7 @@ def KL_NMF(PeakO, X1, X2, K, maxiter, iterLoss=0, lambda1=1, lambda2=1, batch_si
             
     return W1, W2, H1, H2
 
-def compute_adjacency_with_limits(coords, lattice=lattice):
+def compute_adjacency_with_limits(coords, lattice="square"):
 
     n = len(coords)
     dist_matrix = distance_matrix(coords, coords)
