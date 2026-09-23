@@ -70,7 +70,7 @@ if __name__ == '__main__':
     
     ### inputs are anndata.X
     print("Training...")
-    W1,W2,H1,H2=tri_nmf.KL_NMF(test_mu.t(), train_mu.t(), train_sp.t(), K=k, batch_size=args.batch_size, maxiter=50, iterLoss=1, lambda1=lambda1, lambda2=lambda2, coords=coords,  device=dev, lattice=args.layout)
+    W1,W2,H1,H2=tri_nmf.KL_NMF(test_mu.t(), train_mu.t(), train_sp.t(), K=k, batch_size=args.batch_size, maxiter=50, iterLoss=1, lambda1=lambda1, lambda2=lambda2, coords=coords,  device=dev, lattice=args.lattice)
     print("Training complete.")
     W1=W1[:,:k]
     H2=H2[:k,:]
