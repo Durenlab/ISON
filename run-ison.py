@@ -76,8 +76,8 @@ if __name__ == '__main__':
     H2=H2[:k,:]
     O2_hat=torch.mm(W1,H2)
 
-    if obs_ratio > 100 or not np.isfinite(obs_ratio):
-        sys.exit("Output values are too large; try a different lambda_1.")
+    # if obs_ratio > 100 or not np.isfinite(obs_ratio):
+    #     sys.exit("Output values are too large; try a different lambda_1.")
 
     output_dir = args.output_dir
     if not os.path.exists(output_dir):
