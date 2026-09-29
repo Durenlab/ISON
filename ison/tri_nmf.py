@@ -5,7 +5,7 @@ import pandas as pd
 from scipy.sparse import diags
 from sklearn.model_selection import KFold
 import sys
-import utils
+from . import utils
 import gc
 from scipy.spatial import distance_matrix
         
@@ -146,15 +146,27 @@ def KL_NMF(PeakO, X1, X2, K, maxiter, iterLoss=0, lambda1=1, lambda2=1, batch_si
             x2splits[i] = x2splits[i].cpu()
             torch.cuda.empty_cache()
             
-        W20_H10 = torch.matmul(W20, H10)
-        W20_H20 = torch.matmul(W20, H20)
-        W10_H10 = torch.matmul(W10, H10)
-        
+        # Accumulate the loss over the same mini-batches used for the update
+        # step above, instead of materializing the full W10_H10 (peaks x
+        # cells) dense product at once -- for ~600k peaks that OOM'd even on
+        # an 80GB GPU once cell counts passed a few thousand.
+        dnorm1 = torch.zeros((), device=device, dtype=dtype)
+        dnorm2 = torch.zeros((), device=device, dtype=dtype)
+        dnorm3 = torch.zeros((), device=device, dtype=dtype)
+        for s1, s2 in zip(kf.split(X1.t()), kf.split(X2.t())):
+            mb1, mb2 = s1[1], s2[1]
+            W20_H10_mb = torch.matmul(W20, H10[:, mb1])
+            W20_H20_mb = torch.matmul(W20, H20[:, mb2])
+            W10_H10_mb = torch.matmul(W10, H10[:, mb1])
 
-        dnorm1 = (torch.sum(X1 * torch.log((X1 + eps) / (W20_H10 + eps)) - X1 + W20_H10)) / l2
-        dnorm2 = (torch.sum(X2 * torch.log((X2 + eps) / (W20_H20 + eps)) - X2 + W20_H20)) / l3
-        dnorm3 = (torch.sum(PeakO * torch.log((PeakO + eps) / (W10_H10 + eps)) - PeakO + W10_H10)) / l1      
-        
+            dnorm1 += torch.sum(X1[:, mb1] * torch.log((X1[:, mb1] + eps) / (W20_H10_mb + eps)) - X1[:, mb1] + W20_H10_mb)
+            dnorm2 += torch.sum(X2[:, mb2] * torch.log((X2[:, mb2] + eps) / (W20_H20_mb + eps)) - X2[:, mb2] + W20_H20_mb)
+            dnorm3 += torch.sum(PeakO[:, mb1] * torch.log((PeakO[:, mb1] + eps) / (W10_H10_mb + eps)) - PeakO[:, mb1] + W10_H10_mb)
+
+        dnorm1 = dnorm1 / l2
+        dnorm2 = dnorm2 / l3
+        dnorm3 = dnorm3 / l1
+
         print(f"{iters}:{dnorm1}, {dnorm2}, {dnorm3}")
             
     return W1, W2, H1, H2

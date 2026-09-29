@@ -19,7 +19,13 @@ If you have a GPU and wish to enable CUDA support, please install the appropriat
 ```
 conda env create -f environment.yml
 conda activate ison_env
+pip install -e .
 ```
+
+`pip install -e .` installs the `ison` package (and `magic-impute`, which `evaluation.py` needs) so that `run-ison.py` and `evaluation.py` can import it from anywhere.
+Alternatively, run `pip install -e .` in any existing Python >= 3.9 environment.
+The default PyPI `torch` wheel is installed; for GPU support install a CUDA-matched `torch` first.
+If `leidenalg` or `numba` fail to build from pip wheels on your platform, install them with conda first.
 
 ## Running the model
 

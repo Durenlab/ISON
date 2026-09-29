@@ -6,16 +6,20 @@ from scipy.sparse import issparse
 
 
 def convert_to_tensor(adata, transpose=False, device=None):
+    # Cast to float32 before densifying: adata.X is often float64, and
+    # densifying a large sparse ATAC matrix (e.g. peaks x cells) at float64
+    # doubles peak host RAM versus the float32 the GPU training loop uses,
+    # which OOM'd on samples with ~600k peaks x ~10k cells.
     if transpose== True:
-        adata = torch.from_numpy(adata.X.T)
+        adata = torch.from_numpy(adata.X.T.astype(np.float32, copy=False))
     else:
         if issparse(adata.X):
-            adata = torch.from_numpy(adata.X.A)
+            adata = torch.from_numpy(adata.X.astype(np.float32).toarray())
         else:
-            adata = torch.from_numpy(adata.X)
+            adata = torch.from_numpy(np.asarray(adata.X, dtype=np.float32))
     if device:
         adata=adata.to(device)
-    
+
     return adata
 
 def pearson_correlation(A, B, d):

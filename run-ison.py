@@ -7,12 +7,8 @@ import numpy as np
 import random
 import os
 import sys
-utils_path = os.path.join(os.path.dirname(__file__), 'project')
-sys.path.append(utils_path)
 
-import utils
-import preprocess
-import tri_nmf
+from ison import utils, preprocess, tri_nmf
 
 dev= utils.get_device()
 

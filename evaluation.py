@@ -9,12 +9,8 @@ from scipy.stats import pearsonr
 from scipy.sparse import issparse
 import magic
 
-import sys
-utils_path = os.path.join(os.path.dirname(__file__), 'project')
-sys.path.append(utils_path)
-import utils
-import preprocess
-import tri_nmf
+
+from ison import utils, preprocess, tri_nmf
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
