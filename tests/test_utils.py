@@ -4,7 +4,7 @@ import torch
 from scipy.sparse import csr_matrix
 from scipy.stats import pearsonr
 
-from ison import utils
+from ison_spatial import utils
 
 
 def test_get_device():

@@ -8,7 +8,7 @@ import random
 import os
 import sys
 
-from ison import utils, preprocess, tri_nmf
+from ison_spatial import utils, preprocess, tri_nmf
 
 dev= utils.get_device()
 

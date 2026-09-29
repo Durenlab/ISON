@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from scipy.sparse import csr_matrix
 
-from ison import preprocess
+from ison_spatial import preprocess
 
 
 def _adata(x, obs, var):

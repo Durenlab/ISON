@@ -1,5 +1,5 @@
-import ison
-from ison import preprocess, tri_nmf, utils
+import ison_spatial
+from ison_spatial import preprocess, tri_nmf, utils
 
 
 def test_public_api_exists():
@@ -13,4 +13,4 @@ def test_public_api_exists():
 
 def test_tri_nmf_uses_package_utils():
     assert tri_nmf.utils is utils
-    assert ison.__file__ is not None
+    assert ison_spatial.__file__ is not None

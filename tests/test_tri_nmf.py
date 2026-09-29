@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 
-from ison import tri_nmf
+from ison_spatial import tri_nmf
 
 
 def test_adjacency_is_symmetric_binary():

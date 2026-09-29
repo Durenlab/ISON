@@ -10,7 +10,7 @@ from scipy.sparse import issparse
 import magic
 
 
-from ison import utils, preprocess, tri_nmf
+from ison_spatial import utils, preprocess, tri_nmf
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
